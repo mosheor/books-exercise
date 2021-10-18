@@ -34,7 +34,6 @@ def load_data():
     print("user table loaded")
 
     # load author and quote tables
-    # author table: id,name,birthday,bornlocation,bio
     # quote table: id,content,author_id
     with open('app/sample-data/author.csv', 'r', encoding="utf-8") as author_csv:
         author_csv_reader = csv.reader(author_csv, delimiter=',')

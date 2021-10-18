@@ -77,4 +77,6 @@ class Author(db.Model):
     birthday = db.Column("birthday", db.DateTime)
     bornlocation = db.Column("bornlocation", db.String(150))
     bio = db.Column("bio", db.Text())
-    quotes = db.relationship("Quote", backref="author")  # One author to many Quotes
+    quotes = db.relationship("Quote", backref="author", lazy='dynamic')  # One author to many Quotes
+
+
