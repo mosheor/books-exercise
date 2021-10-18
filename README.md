@@ -12,9 +12,6 @@ Tools and packages used in this project:
 - [Flask-RESTX](https://flask-restx.readthedocs.io/): a Flask extension for building REST APIs
 - [PyTest](https://docs.pytest.org/en/latest/): a Python testing framework
 - [Jest](https://jestjs.io/): a JavaScript testing framework
-- Python Linting and Formatting: flake8, black, isort
-- JS Linting and Formatting: ESLint and Prettier
-- JSON Web Tokens (JWT) via flask-bcrypt and pyjwt
 
 ## Setup
 
