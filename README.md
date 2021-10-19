@@ -23,7 +23,7 @@ You need to install the followings:
 
 ## Run
 
-1. Clone the repo: `git clone https://github.com/harrywang/fred.git`
+1. Clone the repo in your mailbox
 2. Switch to `fred` folder and run `docker-compose up -d --build`
 3. Setup database and load data:
 ```

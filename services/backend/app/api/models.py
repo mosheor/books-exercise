@@ -79,4 +79,3 @@ class Author(db.Model):
     bio = db.Column("bio", db.Text())
     quotes = db.relationship("Quote", backref="author", lazy='dynamic')  # One author to many Quotes
 
-
