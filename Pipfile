@@ -16,7 +16,6 @@ name = "pypi"
  httpx = "0.26.0"
  Werkzeug = "2.0.2"
  sqlalchemy="1.4.25"
- pytest-httpx = "*"
 
 [dev-packages]
 flake8 ="*"
@@ -24,6 +23,7 @@ isort ="*"
 pytest ="*"
 pytest-cov ="*"
 pytest-xdist ="*"
+pytest-httpx = "*"
 
 [requires]
 python_version = "3.10"
