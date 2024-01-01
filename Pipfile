@@ -16,7 +16,7 @@ name = "pypi"
  httpx = "0.26.0"
  Werkzeug = "2.0.2"
  sqlalchemy="1.4.25"
-pytest-httpx = "*"
+ pytest-httpx = "*"
 
 [dev-packages]
 flake8 ="*"

@@ -8,3 +8,4 @@ requests
 psycopg2-binary>=2.8.6
 pyjwt>=1.7.1
 python-dateutil>=2.8.1
+httpx==0.26.0
