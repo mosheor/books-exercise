@@ -20,9 +20,6 @@ quote = quotes_namespace.model(
         "author_name": fields.String(required=True),
     },
 )
-error_model = quotes_namespace.model('ErrorModel', {
-    'error': fields.String(description='Error message'),
-})
 
 random_quotes_parser = quotes_namespace.parser()
 random_quotes_parser.add_argument(

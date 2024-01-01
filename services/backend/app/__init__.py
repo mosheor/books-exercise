@@ -1,12 +1,21 @@
 # app/__init__.py
-
-
+import logging
 import os
+import sys
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
+
+# Basic configuration for logging
+logging.basicConfig(
+    level=logging.DEBUG,  # Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',  # Customize format here
+    handlers=[
+        logging.StreamHandler(sys.stderr)  # Logging to stderr
+    ]
+)
 
 
 # instantiate the extensions

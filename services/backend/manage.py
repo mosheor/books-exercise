@@ -1,7 +1,6 @@
 # manage.py
 
 
-import sys
 import csv
 from dateutil import parser
 

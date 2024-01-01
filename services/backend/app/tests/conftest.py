@@ -72,7 +72,8 @@ def add_authors(test_database):
     db.session.add_all([
         Author(name="Or Moshe", birthday=datetime(1998, 4, 22), bornlocation='Tel Aviv', bio='A nice guyyy'),
         Author(name="Leo Messi", birthday=datetime(1987, 6, 24), bornlocation='Rosario', bio='A nice player'),
-        Author(name="Author 3", birthday=datetime(1910, 8, 3), bornlocation='Earth', bio='A spooky one')
+        Author(name="Author 3", birthday=datetime(1910, 8, 3), bornlocation='Earth', bio='A spooky one'),
+        Author(name="Suzanne Collins", birthday=datetime(1959, 8, 3), bornlocation='Earth', bio='A nice author'),
     ])
     yield
     test_database.session.query(Author).delete()

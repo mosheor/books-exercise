@@ -1,9 +1,16 @@
 # app/api/utils.py
+import abc
+import logging
+from urllib.parse import urljoin
 
-# utility helper functions
+import httpx
+from flask import current_app
+from httpx import HTTPError
 
 from app import db
 from app.api.models import Author, Quote, User
+
+logger = logging.getLogger(__name__)
 
 
 def get_all_users():
@@ -40,7 +47,6 @@ def delete_user(user):
 
 
 def add_quote(author_name, content):
-
     author = Author()
     quote = Quote()
 
@@ -57,3 +63,47 @@ def add_quote(author_name, content):
     db.session.add(quote)
     db.session.commit()
     return quote
+
+
+class APIClient(abc.ABC):
+    """
+    Base class for API clients.
+    """
+    def __init__(self, base_url):
+        self._base_url = base_url
+        self._client = httpx.Client()
+        self._max_retries = 3
+
+    def _make_request(self, method, endpoint, params=None):
+        """Helper method to make a request with retries and error handling."""
+        if params is None:
+            params = {}
+
+        url = urljoin(self._base_url, endpoint)
+        for attempt in range(self._max_retries):
+            try:
+                response = self._client.request(method, url, params=params)
+                response.raise_for_status()
+                return response
+            except HTTPError as http_err:
+                logger.error("HTTP error occurred: %s", str(http_err))
+            except Exception as err:
+                logger.error("An error occurred: %s", str(err))
+        return None
+
+    @abc.abstractmethod
+    def get_books_by_author(self, author_name: str):
+        ...
+
+
+class BooksApiClient(APIClient):
+    """
+    Client for the New York Times Books API.
+    """
+    def __init__(self, base_url=None):
+        super().__init__(base_url=base_url or current_app.config["BOOKS_API_BASE_URL"])
+
+    def get_books_by_author(self, author_name: str):
+        return self._make_request(
+            "GET", "reviews.json", params={'author': author_name, 'api-key': current_app.config["BOOKS_API_KEY"]}
+        )
