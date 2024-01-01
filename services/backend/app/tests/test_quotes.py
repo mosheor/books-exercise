@@ -53,3 +53,26 @@ def test_random_quotes(test_app, test_database, add_quote):
     # 5 quotes inserted above
     # make sure only 3 returned
     assert len(data) == 3
+
+
+@pytest.mark.parametrize(
+    ["limit"],
+    [
+        pytest.param(2),
+        pytest.param(7),
+        pytest.param(100, marks=pytest.mark.xfail(reason="limit bigger than max", strict=True)),
+        pytest.param(-9, marks=pytest.mark.xfail(reason="limit smaller than max", strict=True)),
+        pytest.param('a', marks=pytest.mark.xfail(reason="limit not an int", strict=True)),
+    ],
+)
+def test_random_quotes_with_limit(test_app, add_quotes, limit):
+    # Arrange
+    client = test_app.test_client()
+
+    # Act
+    resp = client.get("/quotes/random", query_string={"limit": limit})
+    data = json.loads(resp.data)
+
+    # Assert
+    assert resp.status_code == 200
+    assert len(data) == limit

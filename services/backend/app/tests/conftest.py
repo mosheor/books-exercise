@@ -34,25 +34,35 @@ def add_user():
     return _add_user
 
 
+def _add_quote(author_name, content):
+    author = Author()
+    quote = Quote()
+
+    author.name = author_name
+    quote.content = content
+
+    # check whether the author exists
+    exist_author = db.session.query(Author).filter_by(name=author.name).first()
+    if exist_author is not None:  # the current author exists
+        quote.author = exist_author
+    else:
+        quote.author = author
+
+    db.session.add(quote)
+    db.session.commit()
+    return quote
+
+
 @pytest.fixture(scope="module")
 def add_quote():
-    def _add_quote(author_name, content):
-
-        author = Author()
-        quote = Quote()
-
-        author.name = author_name
-        quote.content = content
-
-        # check whether the author exists
-        exist_author = db.session.query(Author).filter_by(name=author.name).first()
-        if exist_author is not None:  # the current author exists
-            quote.author = exist_author
-        else:
-            quote.author = author
-
-        db.session.add(quote)
-        db.session.commit()
-        return quote
-
     return _add_quote
+
+
+@pytest.fixture
+def add_quotes(test_database):
+    for i in range(20):
+        _add_quote(f"Or Moshe {i}", f"Quote #{i}")
+    yield
+    test_database.session.query(Quote).delete()
+    test_database.session.query(Author).delete()
+
