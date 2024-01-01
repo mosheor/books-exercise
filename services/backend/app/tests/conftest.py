@@ -1,5 +1,5 @@
 # app/tests/conftest.py
-
+from datetime import datetime
 
 import pytest
 
@@ -66,3 +66,13 @@ def add_quotes(test_database):
     test_database.session.query(Quote).delete()
     test_database.session.query(Author).delete()
 
+
+@pytest.fixture
+def add_authors(test_database):
+    db.session.add_all([
+        Author(name="Or Moshe", birthday=datetime(1998, 4, 22), bornlocation='Tel Aviv', bio='A nice guyyy'),
+        Author(name="Leo Messi", birthday=datetime(1987, 6, 24), bornlocation='Rosario', bio='A nice player'),
+        Author(name="Author 3", birthday=datetime(1910, 8, 3), bornlocation='Earth', bio='A spooky one')
+    ])
+    yield
+    test_database.session.query(Author).delete()
