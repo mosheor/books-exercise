@@ -1,13 +1,11 @@
 # app/api/quotes.py
 # APIs for quotes
 
-import random
-
 from flask import request
-from flask_restx import Namespace, Resource, fields
+from flask_restx import Namespace, Resource, fields, inputs
+from sqlalchemy import func
 
-from app import db
-from app.api.models import Author, Quote
+from app.api.models import Quote
 from app.api.utils import add_quote
 
 quotes_namespace = Namespace("quotes")
@@ -21,6 +19,15 @@ quote = quotes_namespace.model(
         "content": fields.String(required=True),
         "author_name": fields.String(required=True),
     },
+)
+error_model = quotes_namespace.model('ErrorModel', {
+    'error': fields.String(description='Error message'),
+})
+
+random_quotes_parser = quotes_namespace.parser()
+random_quotes_parser.add_argument(
+    'limit', type=inputs.int_range(1, 10), default=3,
+    help='Limit of the amount of quotes returned. Should be between 1 and 10.'
 )
 
 
@@ -58,17 +65,19 @@ class Quotes(Resource):
 # we dont use marshal with - no information
 class RandomQuotes(Resource):
 
-    # @quotes_namespace.marshal_with(quote)
+    @quotes_namespace.expect(random_quotes_parser, validate=True)
+    @quotes_namespace.marshal_list_with(quote)
     def get(self):
-        """Returns three random quotes with author info"""
-        quotes = Quote.query.all()
-        quotes_list = []
-        for q in quotes:
-            quotes_list.append(q.to_dict())
+        """
+        Returns random quotes with author info
+        If limit is not provided, it will return 3 quotes
+        """
+        args = random_quotes_parser.parse_args()
+        limit = args['limit']
 
-        # random choose three quotes
-        randam_quotes = random.sample(quotes_list, k=3)
-        return randam_quotes, 200
+        # A more efficient way to do it - no need to fetch all data into memory
+        quotes = Quote.query.order_by(func.random()).limit(limit)
+        return [q.to_dict() for q in quotes], 200
 
 
 quotes_namespace.add_resource(Quotes, "")
