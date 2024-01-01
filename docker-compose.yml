@@ -17,6 +17,7 @@ services:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/app_dev
       - DATABASE_TEST_URL=postgresql://postgres:postgres@db:5432/app_test
       - SECRET_KEY=change_this_to_some_random_key
+      - BOOKS_API_KEY=change_this_to_your_books_api_key
     depends_on:
       - db
 
